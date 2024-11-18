@@ -30,9 +30,17 @@ module top(
   wire safe_clk; // use safe_clk (before ODDR) to internal safe clocking with synchronous safe_reset
   wire safe_reset;
   wire ex_count_out;
+  
+  wire led_btnc, led_sr;
+  wire pmod_btnc, pmod_sr;
     
-  assign led = { ex_count_out, locked, safe_reset, btnC };
-  assign JA  = {      CLK_OUT, locked, safe_reset, btnC };
+  OBUF obuf_led_btnc( .I(btnC), .O(led_btnc) );
+  OBUF obuf_pmod_btnc( .I(btnC), .O(pmod_btnc) );
+  OBUF obuf_led_sr( .I(safe_reset), .O(led_sr) );
+  OBUF obuf_pmod_sr( .I(safe_reset), .O(pmod_sr) );
+    
+  assign led = { ex_count_out, locked, led_sr, led_btnc };
+  assign JA  = {      CLK_OUT, locked, pmod_sr, pmod_btnc };
 
   // tie 4-digit 7-segment display anodes to 1 (PNP transistor off) to stop glowing display
   genvar ii;
