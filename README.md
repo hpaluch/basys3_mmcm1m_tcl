@@ -5,18 +5,18 @@ from 100 MHz on-board clock for Artix-7 Digilent Basys3 board and Vivado
 2024.1.
 
 Please note that normally only 4.69 Mhz or higher output frequency is permitted on MMCM
-output. However using `CLKOUT4_CASCADE = TRUE` new minimum is 0.036 MHz. See DS181 for more details
+output. However using `CLKOUT4_CASCADE = TRUE` new minimum is 0.036 MHz. See [DS181](DS181) for more details
 
-> WARNING! There are several Clock and Reset warnings - I need to fix them before making release.
->
 > Work in Progress.
 >
 > There is warning `HSR_BOUNDARY_TOP`, seen also on: https://adaptivesupport.amd.com/s/question/0D54U00008fEHC9SAO/wrong-fdre-output-during-postimplementation-simulation?language=en_US
+> - probably harmless(?)
 
 Status:
 - TCL script [aa-gen-project.tcl](aa-gen-project.tcl) now generates project `../basys3_mmcm1m_work/basys3_mmcm1m_work.xpr`
   without error
-- Project `../basys3_mmcm1m_work/basys3_mmcm1m_work.xpr` now builds without fatal error (but some warnings)
+- Project `../basys3_mmcm1m_work/basys3_mmcm1m_work.xpr` now builds without fatal error - single warning
+  about `HSR_BOUNDARY_TOP`
 
 This project is based on "IP Design Example..." code (see
 [clk_wiz_0_exdes.v](clk_wiz_0_exdes.v), generated from "Clock Wizard", that
@@ -107,3 +107,4 @@ Some related resources:
 - https://docs.amd.com/r/en-US/ug939-vivado-designing-with-ip-tutorial
 - https://docs.amd.com/r/2020.2-English/ug835-vivado-tcl-commands/import_ip
 
+[DS181]: https://docs.amd.com/v/u/en-US/ds181_Artix_7_Data_Sheet

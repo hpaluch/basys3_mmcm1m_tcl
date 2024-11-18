@@ -57,10 +57,7 @@
 module clk_wiz_0_exdes 
  (
   // Reset that only drives logic in example design
-  input         COUNTER_RESET,
   output [1:1]   CLK_OUT,
-  // High bits of counters driven by clocks
-  output        COUNT,
   // Status and control signals
   input         reset,
   output        locked,
@@ -80,7 +77,7 @@ module clk_wiz_0_exdes
   // Clock to Q delay of 100ps
   localparam TCQ  = 100;
   // When the clock goes out of lock, reset the counters
-  wire          reset_int = (!locked)  || reset  || COUNTER_RESET;
+  wire          reset_int = (!locked)  || reset;
 
   (* ASYNC_REG = "TRUE" *)  reg rst_sync;
   (* ASYNC_REG = "TRUE" *)  reg rst_sync_int;
@@ -90,10 +87,10 @@ module clk_wiz_0_exdes
   // Declare the clocks and counter
   wire           clk_int;
   wire           clk;
-  reg  [C_W-1:0] counter;
   wire      clk_in1_buf;
   wire      clk_in2_buf;
   wire      clkfb_in_buf;
+  wire clk_out1_unused, clk_out2_unused, clk_out3_unused, clk_out4_unused, clk_out6_unused, clk_out7_unused;
 
   assign safe_reset = rst_sync_int2;
   assign safe_clk = clk;
@@ -102,8 +99,10 @@ module clk_wiz_0_exdes
   //--------------------------------------
   clk_wiz_0 clknetwork
    (
+   .clk_out1(clk_out1_unused), .clk_out2(clk_out2_unused), .clk_out3(clk_out3_unused), .clk_out4(clk_out4_unused),
     // Clock out ports // clk_out5 = CLKOUT4 = cascade out = 1 MHz output
     .clk_out5           (clk_int),
+    .clk_out6 (clk_out6_unused), .clk_out7(clk_out7_unused),
     // Status and control signals
     .reset              (reset),
     .locked             (locked),
@@ -141,18 +140,5 @@ module clk_wiz_0_exdes
             rst_sync_int2 <= rst_sync_int1;
        end
     end
-
-  // Output clock sampling
-  //-----------------------------------
-  always @(posedge clk or posedge rst_sync_int2) begin
-    if (rst_sync_int2) begin
-      counter <= #TCQ { C_W { 1'b 0 } };
-    end else begin
-      counter <= #TCQ counter + 1'b 1;
-    end
-  end
-
-  // alias the high bit to the output
-  assign COUNT = counter[C_W-1];
 
 endmodule

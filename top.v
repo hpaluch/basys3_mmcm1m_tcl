@@ -20,20 +20,19 @@
 module top(
     input clk,
     input btnC,
-    output [4:0]led,
-    output [4:0]JA,
+    output [3:0]led,
+    output [3:0]JA,
     output [3:0]an // common anodes of 4 digit display, Active low - used here to stop glowing
     );
 
   wire locked;
   wire CLK_OUT;
-  wire COUNT;
   wire safe_clk; // use safe_clk (before ODDR) to internal safe clocking with synchronous safe_reset
   wire safe_reset;
   wire ex_count_out;
     
-  assign led = { ex_count_out, COUNT, locked, safe_reset, btnC };
-  assign JA  = { COUNT, CLK_OUT, locked, safe_reset, btnC };
+  assign led = { ex_count_out, locked, safe_reset, btnC };
+  assign JA  = {      CLK_OUT, locked, safe_reset, btnC };
 
   // tie 4-digit 7-segment display anodes to 1 (PNP transistor off) to stop glowing display
   genvar ii;
@@ -43,14 +42,12 @@ module top(
     
   clk_wiz_0_exdes exdes_inst1 (// Clock in ports
     // Reset for logic in example design
-    .COUNTER_RESET      (btnC),
     .CLK_OUT            (CLK_OUT), // must be always FPGA Output Pin, because it uses ODDR
-    // High bits of the counters
-    .COUNT              (COUNT),
     // Status and control signals
     .reset              (btnC),
     .locked             (locked),
     .clk_in1            (clk),
+    // safe synchronous signals - see ex_count for usage below
     .safe_reset( safe_reset ), .safe_clk( safe_clk ) );
 
   // example counter using 1 Mhz MMCM clock (safe_clock) and synchronous reset (safe_reset):
