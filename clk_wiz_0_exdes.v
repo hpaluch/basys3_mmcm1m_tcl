@@ -77,7 +77,9 @@ module clk_wiz_0_exdes
   // Clock to Q delay of 100ps
   localparam TCQ  = 100;
   // When the clock goes out of lock, reset the counters
-  wire          reset_int = (!locked)  || reset;
+  // PROBLEM: LUT with 2 async inputs (reset & !locked): wire          reset_int = (!locked)  || reset;
+  // Solved using just !locked:
+  wire          reset_int = !locked;
 
   (* ASYNC_REG = "TRUE" *)  reg rst_sync;
   (* ASYNC_REG = "TRUE" *)  reg rst_sync_int;
