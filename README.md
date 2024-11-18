@@ -5,7 +5,7 @@ from 100 MHz on-board clock for Artix-7 Digilent Basys3 board and Vivado
 2024.1.
 
 Please note that normally only 4.69 Mhz or higher output frequency is permitted on MMCM
-output. However using `CLKOUT4_CASCADE = TRUE` new minimum is 0.036 MHz. See [DS181](DS181) for more details
+output. However using `CLKOUT4_CASCADE = TRUE` new minimum is 0.036 MHz. See [DS181][DS181] for more details
 
 > Work in Progress.
 >
